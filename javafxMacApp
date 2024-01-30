@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ "$1" = "-h" -o "$1" = "--help" -o -z "$1" ]; then cat <<EOF
+javafxMacApp v1.0.0 for Mac OS X
+Creates the simplest possible Mac app from javafx application
+
+the first argument is appName.
+
+    `basename "$0"` "My app"
+
+EOF
+exit; fi
+
+APPNAME=$1
+CONTENT_DIR="build/$APPNAME.app/Contents"
+DIR="build/$APPNAME.app/Contents/MacOS"
+APP_IMAGE_DIR="build/image"
+
+#
+#if [ -a "$APPNAME.app" ]; then
+#	echo "$PWD/$APPNAME.app already exists :("
+#	exit 1
+#fi
+
+mkdir -p "$DIR"
+cp "$APP_IMAGE_DIR/bin/app" "$DIR/$APPNAME"
+chmod +x "$DIR/$APPNAME"
+
+cp -rf "$APP_IMAGE_DIR/bin/java" "$DIR"
+cp -rf "$APP_IMAGE_DIR/bin/jrunscript" "$DIR"
+cp -rf "$APP_IMAGE_DIR/bin/keytool" "$DIR"
+
+cp -rf "$APP_IMAGE_DIR/conf"  "$CONTENT_DIR"
+cp -rf "$APP_IMAGE_DIR/legal"  "$CONTENT_DIR"
+cp -rf "$APP_IMAGE_DIR/lib"  "$CONTENT_DIR"
+cp -rf "$APP_IMAGE_DIR/release"  "$CONTENT_DIR"
+
+echo "app generated in $PWD/build/$APPNAME.app"
